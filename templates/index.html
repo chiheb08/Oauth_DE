@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub OAuth Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 20px;
+            float: left;
+        }
+
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-size: 1rem;
+        }
+
+        table td a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+
+        table td a:hover {
+            color: #005bb5;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        ul li {
+            margin: 5px 0;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            font-size: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+
+    <!-- Profile Picture -->
+    {% if user_info.avatar_url %}
+        <img src="{{ user_info.avatar_url }}" alt="Profile Picture">
+    {% else %}
+        <p>Avatar not available</p>
+    {% endif %}
+
+    <!-- Welcome Message -->
+    <h1>Hello, {{ user_info.username }}!</h1>
+    <p><strong>Bio:</strong> {{ user_info.bio }}</p>
+
+    <!-- Emails Section -->
+    <h2>Your Emails:</h2>
+    <ul>
+        {% for email in user_info['emails'] %}
+            <li>{{ email['email'] }} ({{ 'Primary' if email['primary'] else 'Secondary' }})</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Repositories Table -->
+    <h2>Your Repositories:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Repository Name</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for repo in user_info.repos %}
+                <tr>
+                    <td>{{ repo.name }}</td>
+                    <td><a href="{{ repo.html_url }}" target="_blank">Visit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
